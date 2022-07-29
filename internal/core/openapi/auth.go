@@ -18,22 +18,74 @@
 package openapi
 
 import (
+	"fmt"
+
 	"github.com/acmestack/envcd/internal/core/plugin"
+	"github.com/acmestack/envcd/internal/core/storage/dao"
 	"github.com/acmestack/envcd/internal/pkg/context"
+	"github.com/acmestack/envcd/internal/pkg/entity"
 	"github.com/acmestack/envcd/pkg/entity/data"
 	"github.com/acmestack/godkits/gox/errorsx"
-	"github.com/acmestack/godkits/log"
+	"github.com/acmestack/godkits/gox/stringsx"
 	"github.com/gin-gonic/gin"
 )
 
 func (openapi *Openapi) login(ctx *gin.Context) {
 	c := &context.Context{Action: func() (*data.EnvcdResult, error) {
-		log.Info("hello world")
-		openapi.exchange.Put("a", "ada")
+		fmt.Println("hello world")
 		return nil, errorsx.Err("test error")
 	}}
 	if ret, err := plugin.NewChain(openapi.executors).Execute(c); err != nil {
-		log.Error("ret = %s, error = %s", ret, err)
+		fmt.Printf("ret = %v, error = %v", ret, err)
+	}
+	ctx.JSON(200, data.Success("hello world").Data)
+}
+
+func (openapi *Openapi) logout(ctx *gin.Context) {
+	c := &context.Context{Action: func() (*data.EnvcdResult, error) {
+		fmt.Println("hello world")
+		// UserDao.save(),
+		// LogDao.save()
+		return nil, errorsx.Err("test error")
+	}}
+	if ret, err := plugin.NewChain(openapi.executors).Execute(c); err != nil {
+		fmt.Printf("ret = %v, error = %v", ret, err)
+	}
+	ctx.JSON(200, data.Success("hello world").Data)
+}
+
+func (openapi *Openapi) createUser(ctx *gin.Context) {
+	c := &context.Context{Action: func() (*data.EnvcdResult, error) {
+		fmt.Println("hello world")
+		return nil, errorsx.Err("test error")
+	}}
+	if ret, err := plugin.NewChain(openapi.executors).Execute(c); err != nil {
+		fmt.Printf("ret = %v, error = %v", ret, err)
+	}
+	ctx.JSON(200, data.Success("hello world").Data)
+}
+
+func (openapi *Openapi) getUserById(ctx *gin.Context) {
+	c := &context.Context{Action: func() (*data.EnvcdResult, error) {
+		fmt.Println("hello world")
+		return nil, errorsx.Err("test error")
+	}}
+	id := stringsx.ToInt(ctx.Param("id"))
+	user := entity.User{Id: id}
+	dao.New(openapi.storage).SelectUser(user)
+	if ret, err := plugin.NewChain(openapi.executors).Execute(c); err != nil {
+		fmt.Printf("ret = %v, error = %v", ret, err)
+	}
+	ctx.JSON(200, data.Success("hello world").Data)
+}
+
+func (openapi *Openapi) deleteUser(ctx *gin.Context) {
+	c := &context.Context{Action: func() (*data.EnvcdResult, error) {
+		fmt.Println("hello world")
+		return nil, errorsx.Err("test error")
+	}}
+	if ret, err := plugin.NewChain(openapi.executors).Execute(c); err != nil {
+		fmt.Printf("ret = %v, error = %v", ret, err)
 	}
 	ctx.JSON(200, data.Success("hello world").Data)
 }

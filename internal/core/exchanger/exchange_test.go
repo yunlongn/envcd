@@ -226,11 +226,11 @@ func TestStart(t *testing.T) {
 			Password: "root",
 			Host:     "localhost:2379",
 			Hostname: "localhost",
-			Port:     "2379",
+			Port:     2379,
 		},
 	}
 
-	e := &Exchange{exchanger: etcd.New(metadata)}
+	e := Start(metadata)
 	tests := []struct {
 		name string
 		want *Exchange
@@ -256,7 +256,7 @@ var metadata = &config.Exchanger{
 		Password: "root",
 		Host:     "localhost:2379",
 		Hostname: "localhost",
-		Port:     "2379",
+		Port:     2379,
 	},
 }
 
@@ -279,11 +279,21 @@ func TestExchange_Put(t *testing.T) {
 			args:    args{key: "a", value: "abc"},
 			wantErr: false,
 		},
+		{
+			fields:  fields{exchanger: nil},
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			exchange := &Exchange{
 				exchanger: tt.fields.exchanger,
+			}
+			if exchange.exchanger == nil {
+				if !tt.wantErr {
+					t.Errorf("Put() error exchange.exchanger = nil, wantErr %v", tt.wantErr)
+				}
+				return
 			}
 			if err := exchange.Put(tt.args.key, tt.args.value); (err != nil) != tt.wantErr {
 				t.Errorf("Put() error = %v, wantErr %v", err, tt.wantErr)
@@ -310,11 +320,21 @@ func TestExchange_Remove(t *testing.T) {
 			args:    args{key: "a"},
 			wantErr: false,
 		},
+		{
+			fields:  fields{exchanger: nil},
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			exchange := &Exchange{
 				exchanger: tt.fields.exchanger,
+			}
+			if exchange.exchanger == nil {
+				if !tt.wantErr {
+					t.Errorf("Remove() error exchange.exchanger = nil, wantErr %v", tt.wantErr)
+				}
+				return
 			}
 			if err := exchange.Remove(tt.args.key); (err != nil) != tt.wantErr {
 				t.Errorf("Remove() error = %v, wantErr %v", err, tt.wantErr)

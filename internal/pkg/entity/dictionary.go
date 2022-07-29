@@ -15,16 +15,18 @@
  * limitations under the License.
  */
 
-package modules
+package entity
 
 import "time"
 
 type Dictionary struct {
-	Id            uint32
-	UserId        uint32
-	ApplicationId uint32
-	DictKey       string
-	DictValue     string
-	createdAt     time.Time
-	updatedAt     time.Time
+	//TableName gobatis.TableName `dictionary`
+	Id            int       `column:"id"`
+	UserId        int       `column:"user_id"`
+	ApplicationId int       `column:"application_id"`
+	DictKey       string    `column:"dict_key"`
+	DictValue     string    `column:"dict_value"`
+	State         int       `column:"state"`
+	CreatedAt     time.Time `column:"created_at"`
+	UpdatedAt     time.Time `column:"updated_at"`
 }

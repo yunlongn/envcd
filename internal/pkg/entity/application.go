@@ -15,14 +15,18 @@
  * limitations under the License.
  */
 
-package modules
+package entity
 
-import "time"
+import (
+	"time"
+)
 
 type Application struct {
-	Id        uint32
-	Name      string
-	Descr     string
-	createdAt time.Time
-	updatedAt time.Time
+	//TableName gobatis.TableName `application`
+	Id        int       `column:"id"`
+	Name      string    `column:"name"`
+	Note      string    `column:"note"`
+	State     int       `column:"state"`
+	CreatedAt time.Time `column:"created_at"`
+	UpdatedAt time.Time `column:"updated_at"`
 }

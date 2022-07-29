@@ -25,7 +25,8 @@ DROP TABLE IF EXISTS `application`;
 CREATE TABLE `application` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
-  `descr` varchar(150) NOT NULL,
+  `note` varchar(150) NOT NULL,
+  `state` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '1:enable;2:disable',
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
@@ -40,7 +41,8 @@ CREATE TABLE `dictionary` (
   `user_id` int(10) unsigned NOT NULL,
   `application_id` int(10) unsigned NOT NULL,
   `dict_key` varchar(200) NOT NULL,
-  `dict_value` text NOT NULL DEFAULT '',
+  `dict_value` text NOT NULL,
+  `state` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '1:enable;2:disable',
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
@@ -54,7 +56,7 @@ DROP TABLE IF EXISTS `logging`;
 CREATE TABLE `logging` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
-  `logging` text NOT NULL DEFAULT '' COMMENT 'json data',
+  `logging` text NOT NULL COMMENT 'json data',
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`user_id`)
@@ -69,7 +71,8 @@ CREATE TABLE `permission` (
   `user_id` int(10) unsigned NOT NULL,
   `data_type` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '1:application;2:dictionary;3:other',
   `data_id` int(10) unsigned NOT NULL,
-  `descr` varchar(150) NOT NULL DEFAULT '',
+  `note` varchar(150) NOT NULL,
+  `state` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '1:enable;2:disable',
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`)
@@ -84,6 +87,8 @@ CREATE TABLE `user` (
   `name` varchar(30) NOT NULL,
   `password` varchar(100) NOT NULL,
   `salt` varchar(100) NOT NULL,
+  `identity` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '1:admin;2:standard',
+  `state` tinyint(4) unsigned NOT NULL DEFAULT 1 COMMENT '1:enable;2:disable',
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),

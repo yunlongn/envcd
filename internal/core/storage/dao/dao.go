@@ -15,13 +15,14 @@
  * limitations under the License.
  */
 
-package modules
+package dao
 
-import "time"
+import "github.com/acmestack/envcd/internal/core/storage"
 
-type Logging struct {
-	Id        uint32
-	UserId    uint32
-	Logging   string
-	createdAt time.Time
+type Dao struct {
+	storage *storage.Storage
+}
+
+func New(storage *storage.Storage) *Dao {
+	return &Dao{storage: storage}
 }

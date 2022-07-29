@@ -15,15 +15,16 @@
  * limitations under the License.
  */
 
-package modules
+package entity
 
-import "time"
+import (
+	"time"
+)
 
-type User struct {
-	Id        uint32
-	Name      string
-	Password  string
-	Salt      string
-	createdAt time.Time
-	updatedAt time.Time
+type Logging struct {
+	//TableName gobatis.TableName `logging`
+	Id        int       `column:"id"`
+	UserId    int       `column:"user_id"`
+	Logging   string    `column:"logging"`
+	CreatedAt time.Time `column:"created_at"`
 }

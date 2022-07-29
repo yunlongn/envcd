@@ -15,16 +15,20 @@
  * limitations under the License.
  */
 
-package modules
+package entity
 
-import "time"
+import (
+	"time"
+)
 
 type Permission struct {
-	Id        uint32
-	UserId    uint32
-	DataType  uint8
-	DataId    uint32
-	Descr     string
-	createdAt time.Time
-	updatedAt time.Time
+	//TableName gobatis.TableName `permission`
+	Id        int       `column:"id"`
+	UserId    int       `column:"user_id"`
+	DataType  int       `column:"data_type"`
+	DataId    int       `column:"data_id"`
+	Note      string    `column:"note"`
+	State     int       `column:"state"`
+	CreatedAt time.Time `column:"created_at"`
+	UpdatedAt time.Time `column:"updated_at"`
 }

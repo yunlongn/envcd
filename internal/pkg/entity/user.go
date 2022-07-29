@@ -17,5 +17,16 @@
 
 package entity
 
-type UserInfo struct {
+import "time"
+
+type User struct {
+	//TableName gobatis.TableName `user`
+	Id        int       `column:"id"`
+	Name      string    `column:"name"`
+	Password  string    `column:"password"`
+	Salt      string    `column:"salt"`
+	Identity  int       `column:"identity"`
+	State     int       `column:"state"`
+	CreatedAt time.Time `column:"created_at"`
+	UpdatedAt time.Time `column:"updated_at"`
 }
