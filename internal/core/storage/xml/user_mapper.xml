@@ -102,12 +102,11 @@
         </where>
     </delete>
 
-    <select id="pageSelectUser">
+    <select id="selectUser">
         SELECT <include refid="columns_id"> </include> FROM user
         <where>
-            <if test="true">state != "deleted"</if>
-            <if test="{PageUserParam.Name} != nil">AND `name` LIKE CONCAT('%',#{PageUserParam.Name},'%') </if>
+            <if test="1 == 1"> state != "deleted"</if>
+            <if test="{UserParam.Name} != nil">AND name LIKE CONCAT('%',#{UserParam.Name},'%') </if>
         </where>
-        limit #{PageUserParam.Page},#{PageUserParam.PageSize}
     </select>
 </mapper>

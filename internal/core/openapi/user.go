@@ -18,7 +18,9 @@
 package openapi
 
 import (
+	"context"
 	"fmt"
+	"github.com/acmestack/pagehelper"
 	"time"
 
 	"github.com/acmestack/envcd/internal/core/storage/dao"
@@ -240,26 +242,24 @@ func (openapi *Openapi) removeUser(ginCtx *gin.Context) {
 func (openapi *Openapi) users(ginCtx *gin.Context) {
 	openapi.response(ginCtx, nil, func() *result.EnvcdResult {
 		// receive params from request
-		page := stringsx.ToInt(ginCtx.Query("page"))
-		pageSize := stringsx.ToInt(ginCtx.Query("pageSize"))
-		if page == 0 {
-			page = 1
-		}
-		if pageSize == 0 {
-			pageSize = 10
-		}
+		pageNum := stringsx.ToInt(ginCtx.DefaultQuery("page", "1"))
+		pageSize := stringsx.ToInt(ginCtx.DefaultQuery("pageSize", "10"))
 		nameParam := ginCtx.Query("name")
-
-		pageParam := entity.PageUserParam{page, pageSize, nameParam}
-
-		users, err := dao.New(openapi.storage).PageSelectUser(pageParam)
+		userParam := entity.UserParam{Name: nameParam}
+		ctx := pagehelper.C(context.Background()).PageWithCount(int64(pageNum-1), int64(pageSize), "").Build()
+		users, err := dao.New(openapi.storage).PageSelectUser(userParam, ctx)
 		if err != nil {
-			log.Error("select users error = %v", err)
-			return result.Failure(result.ErrorUserNotFound, err)
+			return result.InternalFailure(err)
 		}
-		return result.Success(pageUserVO{
-			page, pageSize, userTransfer(users),
-		})
+		pageInfo := pagehelper.GetPageInfo(ctx)
+		usersPage := &PageListVO{
+			Page:      pageInfo.Page + 1,
+			PageSize:  pageInfo.PageSize,
+			Total:     pageInfo.GetTotal(),
+			TotalPage: pageInfo.GetTotalPage(),
+			List:      users,
+		}
+		return result.Success(usersPage)
 	})
 }
 

@@ -31,8 +31,6 @@ type User struct {
 	UpdatedAt time.Time `column:"updated_at"`
 }
 
-type PageUserParam struct {
-	Page     int
-	PageSize int
-	Name     string
+type UserParam struct {
+	Name string
 }

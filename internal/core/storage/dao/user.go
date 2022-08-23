@@ -20,6 +20,7 @@ package dao
 import (
 	"github.com/acmestack/envcd/internal/pkg/entity"
 	"github.com/acmestack/gobatis"
+	"golang.org/x/net/context"
 )
 
 func init() {
@@ -72,8 +73,8 @@ func (dao *Dao) DeleteUser(model entity.User) (int64, error) {
 	return ret, err
 }
 
-func (dao *Dao) PageSelectUser(model entity.PageUserParam) ([]entity.User, error) {
+func (dao *Dao) PageSelectUser(model entity.UserParam, ctx context.Context) ([]entity.User, error) {
 	var dataList []entity.User
-	err := dao.storage.NewSession().Select("dao.pageSelectUser").Param(model).Result(&dataList)
+	err := dao.storage.NewSession().SetContext(ctx).Select("dao.selectUser").Param(model).Result(&dataList)
 	return dataList, err
 }
